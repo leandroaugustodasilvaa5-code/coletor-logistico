@@ -2,15 +2,55 @@
 <html>
 
 <head>
+
 <meta charset="UTF-8">
-<title>Teste Coletor</title>
+<title>Coletor Logístico</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f4f4;
+text-align:center;
+}
+
+video{
+width:320px;
+margin-top:20px;
+border-radius:10px;
+}
+
+.produto{
+padding:12px;
+border-bottom:1px solid #ccc;
+background:white;
+}
+
+.ok{
+background:#9df59d;
+}
+
+</style>
+
 </head>
 
-<body style="font-family:Arial;text-align:center">
+<body>
 
-<h1>Coletor de Separação</h1>
+<h2>Coletor de Separação</h2>
 
-<p>Se você está vendo esta mensagem o site está funcionando.</p>
+<button onclick="iniciarScanner()">Iniciar Scanner</button>
+
+<br><br>
+
+<video id="video"></video>
+
+<h3>Lista</h3>
+
+<div id="lista"></div>
+
+<script src="app.js"></script>
 
 </body>
 
