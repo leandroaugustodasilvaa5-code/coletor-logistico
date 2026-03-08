@@ -70,7 +70,6 @@ let bancoProdutos = {
 }
 
 let produtos=[]
-
 let separados=[]
 
 function mostrarLista(){
@@ -97,24 +96,32 @@ function iniciarScanner(){
 
 const scanner = new Html5QrcodeScanner(
 "reader",
-{ fps:10, qrbox:250 }
+{
+fps:10,
+qrbox:250,
+formatsToSupport:[
+Html5QrcodeSupportedFormats.EAN_13,
+Html5QrcodeSupportedFormats.EAN_8,
+Html5QrcodeSupportedFormats.CODE_128
+]
+}
 )
 
-scanner.render((codigo)=>{
+scanner.render((codigoBarras)=>{
 
 document.getElementById("codigo").innerHTML =
-"Codigo lido: "+codigo
+"Codigo lido: "+codigoBarras
 
 let encontrado=false
 
 for(let p of produtos){
 
-if(p.ean==codigo){
+if(p.ean==codigoBarras){
 
 encontrado=true
 
-if(!separados.includes(codigo)){
-separados.push(codigo)
+if(!separados.includes(codigoBarras)){
+separados.push(codigoBarras)
 navigator.vibrate(200)
 }
 
@@ -124,14 +131,14 @@ navigator.vibrate(200)
 
 if(!encontrado){
 
-let nomeProduto=bancoProdutos[codigo]
+let nomeProduto=bancoProdutos[codigoBarras]
 
 if(nomeProduto){
 
 let quantidade=prompt("Quantidade do produto:")
 
 produtos.push({
-ean:codigo,
+ean:codigoBarras,
 nome:nomeProduto,
 qtd:quantidade
 })
