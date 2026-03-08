@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Coletor Logístico</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
 
@@ -16,10 +16,10 @@ background:#f4f4f4;
 text-align:center;
 }
 
-video{
+#reader{
 width:320px;
+margin:auto;
 margin-top:20px;
-border-radius:10px;
 }
 
 .produto{
@@ -42,15 +42,74 @@ background:#9df59d;
 
 <button onclick="iniciarScanner()">Iniciar Scanner</button>
 
-<br><br>
-
-<video id="video"></video>
+<div id="reader"></div>
 
 <h3>Lista</h3>
 
 <div id="lista"></div>
 
-<script src="app.js"></script>
+<script>
+
+let produtos = [
+{ean:"7891150065008", nome:"DETERGENTE YPE"},
+{ean:"7896914002017", nome:"PAPEL HIGIENICO"},
+{ean:"7891991002345", nome:"CERVEJA BRAHMA"}
+]
+
+let separados=[]
+
+function mostrarLista(){
+
+let html=""
+
+for(let p of produtos){
+
+let classe = separados.includes(p.ean) ? "produto ok":"produto"
+
+html+=`<div class="${classe}">
+${p.ean} - ${p.nome}
+</div>`
+
+}
+
+document.getElementById("lista").innerHTML=html
+
+}
+
+mostrarLista()
+
+function iniciarScanner(){
+
+const scanner = new Html5QrcodeScanner(
+"reader",
+{ fps:10, qrbox:250 }
+)
+
+scanner.render((codigo)=>{
+
+for(let p of produtos){
+
+if(p.ean==codigo){
+
+if(!separados.includes(codigo)){
+
+separados.push(codigo)
+
+navigator.vibrate(200)
+
+}
+
+}
+
+}
+
+mostrarLista()
+
+})
+
+}
+
+</script>
 
 </body>
 
