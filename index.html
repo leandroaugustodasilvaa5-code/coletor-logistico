@@ -14,12 +14,6 @@ body{
 font-family:Arial;
 background:#f4f4f4;
 text-align:center;
-margin:0;
-padding:0;
-}
-
-h2{
-margin-top:20px;
 }
 
 #reader{
@@ -45,11 +39,6 @@ font-size:16px;
 background:#9df59d;
 }
 
-.info{
-margin-top:10px;
-font-size:18px;
-}
-
 </style>
 
 </head>
@@ -58,15 +47,11 @@ font-size:18px;
 
 <h2>Coletor de Separação</h2>
 
-<button onclick="iniciarScanner()" style="font-size:18px;padding:10px">
-Iniciar Scanner
-</button>
+<button onclick="iniciarScanner()">Iniciar Scanner</button>
 
 <div id="reader"></div>
 
-<div class="info" id="codigo">
-Aguardando leitura...
-</div>
+<h3 id="codigo">Aguardando leitura...</h3>
 
 <h3>Lista de Produtos</h3>
 
@@ -74,11 +59,17 @@ Aguardando leitura...
 
 <script>
 
-let produtos = [
-{ean:"7891150065008", nome:"DETERGENTE YPE", qtd:1},
-{ean:"7896914002017", nome:"PAPEL HIGIENICO", qtd:1},
-{ean:"7891991002345", nome:"CERVEJA BRAHMA", qtd:1}
-]
+// banco de produtos por código de barras
+
+let bancoProdutos = {
+
+"7891150065008":"DET YPE 500ML",
+"7896914002017":"PAP HIG COTTON FD",
+"7891991002345":"CERV BRAHMA LT"
+
+}
+
+let produtos=[]
 
 let separados=[]
 
@@ -102,8 +93,6 @@ document.getElementById("lista").innerHTML=html
 
 }
 
-mostrarLista()
-
 function iniciarScanner(){
 
 const scanner = new Html5QrcodeScanner(
@@ -125,11 +114,8 @@ if(p.ean==codigo){
 encontrado=true
 
 if(!separados.includes(codigo)){
-
 separados.push(codigo)
-
 navigator.vibrate(200)
-
 }
 
 }
@@ -138,21 +124,21 @@ navigator.vibrate(200)
 
 if(!encontrado){
 
-let adicionar = confirm(
-"Produto não está na lista.\nDeseja adicionar?"
-)
+let nomeProduto=bancoProdutos[codigo]
 
-if(adicionar){
+if(nomeProduto){
 
-let nome = prompt("Digite o nome do produto:")
-
-let quantidade = prompt("Digite a quantidade:")
+let quantidade=prompt("Quantidade do produto:")
 
 produtos.push({
 ean:codigo,
-nome:nome,
+nome:nomeProduto,
 qtd:quantidade
 })
+
+}else{
+
+alert("Produto não cadastrado no banco.")
 
 }
 
